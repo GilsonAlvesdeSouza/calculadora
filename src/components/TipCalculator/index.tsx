@@ -4,69 +4,66 @@ import Input from '../Input';
 import * as F from "../../helpers/formatValues";
 
 const TipCalculator = () => {
-    const [consumo, setConsumo] = useState<number>(0);
-  const [porCentoGorjeta, setPorCentoGorjeta] = useState(10);
-  const [gorjeta, setGorjeta] = useState(0);
+  const [consumption, setConsumption] = useState<number>(0);
+  const [percentTip, setPercentTip] = useState(10);
+  const [tip, setTip] = useState(0);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    if (consumo > 0) {      
-      let valorGorjeta = F.fixedDecimal((porCentoGorjeta / 100) * consumo, 2); 
-      setGorjeta(valorGorjeta);
-      let valorTotal = consumo + gorjeta;
+    if (consumption > 0) {
+      let valorGorjeta = F.fixedDecimal((percentTip / 100) * consumption, 2);
+      setTip(valorGorjeta);
+      let valorTotal = consumption + tip;
       setTotal(valorTotal);
     }
-    if (porCentoGorjeta === 0 || isNaN(porCentoGorjeta)) {
-      setTotal(consumo);
+    if (percentTip === 0 || isNaN(percentTip)) {
+      setTotal(consumption);
     }
-  }, [consumo, porCentoGorjeta, gorjeta]);
+  }, [consumption, percentTip, tip]);
 
   const handleConsumo = (e: React.ChangeEvent<HTMLInputElement>) => {
     let intConsumo = parseFloat(e.target.value);
-    setConsumo(intConsumo);
+    setConsumption(intConsumo);
   }
 
   const handlePorcentagemGorjeta = (e: React.ChangeEvent<HTMLInputElement>) => {
     let intGorjeta = parseFloat(e.target.value);
-    setPorCentoGorjeta(intGorjeta);
+    setPercentTip(intGorjeta);
   }
 
   return (
-    
+    <C.CalcArea>
+      <C.ContentCalc>
+        <h1>Calculadora de Gorjetas</h1>
+        <label htmlFor="">Quanto deu a conta? </label>
+        <Input
+          type="number"
+          onChange={handleConsumo}
+          defaultValue={consumption}
+        />
+        <label htmlFor="">Qual a porcentagem da gorjeta? </label>
+        <Input
+          type="number"
+          onChange={handlePorcentagemGorjeta}
+          defaultValue={percentTip}
+        />
 
-      <C.CalcArea>
-        <C.CalcConteudo>
-          <h1>Calculadora de Gorjetas</h1>
-          <label htmlFor="">Quanto deu a conta? </label>
-          <Input
-            type="number"
-            onChange={handleConsumo}
-            defaultValue={consumo}
-          />
-          <label htmlFor="">Qual a porcentagem da gorjeta? </label>
-          <Input
-            type="number"
-            onChange={handlePorcentagemGorjeta}
-            defaultValue={porCentoGorjeta}
-          />
+      </C.ContentCalc>
 
-        </C.CalcConteudo>
-
-        <C.AreaConteudo>
-          <C.InfoConteudo>
-            {consumo > 0 &&
-              <>
-                <p>Sub-total: {consumo > 0 ? F.formattedCurrency(consumo) : "0,00"}</p>
-                <p>
-                  Gorjeta ({isNaN(porCentoGorjeta) ? "0" : porCentoGorjeta}%): {gorjeta > 0 ? F.formattedCurrency(gorjeta) : "0,00"}
-                </p>
-                <h3>Total: {F.formattedCurrency(total)}</h3>
-              </>
-            }
-          </C.InfoConteudo>
-        </C.AreaConteudo>
-      </C.CalcArea>
-    
+      <C.ContentArea>
+        <C.ContentInfo>
+          {consumption > 0 &&
+            <>
+              <p>Sub-total: {consumption > 0 ? F.formattedCurrency(consumption) : "0,00"}</p>
+              <p>
+                Gorjeta ({isNaN(percentTip) ? "0" : percentTip}%): {tip > 0 ? F.formattedCurrency(tip) : "0,00"}
+              </p>
+              <h3>Total: {F.formattedCurrency(total)}</h3>
+            </>
+          }
+        </C.ContentInfo>
+      </C.ContentArea>
+    </C.CalcArea>
   );
 };
 

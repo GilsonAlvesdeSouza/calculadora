@@ -26,14 +26,14 @@ export const CalcArea = styled.div`
   }
 `;
 
-export const CalcConteudo = styled.div`
+export const ContentCalc = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 25%;
   width: 800px;
 `;
 
-export const AreaConteudo = styled.div`
+export const ContentArea = styled.div`
  display: flex;
   flex-direction: column;
   background-color: #CCF5D5;
@@ -42,6 +42,6 @@ export const AreaConteudo = styled.div`
   color: black;
 `;
 
-export const InfoConteudo = styled.div`
+export const ContentInfo = styled.div`
     margin-left: 25%;
 `;

@@ -45,6 +45,6 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-## Print final do projeto
+## `Print final do projeto`
 
 <img src="./src/images/print.png" alt="project print"/>
