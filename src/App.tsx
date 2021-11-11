@@ -1,31 +1,34 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as C from "./App.style"
 import Input from './components/Input';
+import * as F from "./helpers/formatValues";
 
 const App = () => {
-  const [consumo, setConsumo] = useState("0");
-  const [porCentoGorjeta, setPorCentoGorjeta] = useState("10");
+  const [consumo, setConsumo] = useState<number>(0);
+  const [porCentoGorjeta, setPorCentoGorjeta] = useState(10);
   const [gorjeta, setGorjeta] = useState(0);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    if (parseInt(consumo) > 0) {
-      let valorGorjeta = (parseInt(porCentoGorjeta) / 100) * parseInt(consumo);
+    if (consumo > 0) {      
+      let valorGorjeta = F.fixedDecimal((porCentoGorjeta / 100) * consumo, 2); 
       setGorjeta(valorGorjeta);
-      let valorTotal = parseInt(consumo) + gorjeta;
+      let valorTotal = consumo + gorjeta;
       setTotal(valorTotal);
     }
-    if (parseInt(porCentoGorjeta) === 0 || porCentoGorjeta === '') {
-      setTotal(parseInt(consumo));
+    if (porCentoGorjeta === 0 || isNaN(porCentoGorjeta)) {
+      setTotal(consumo);
     }
   }, [consumo, porCentoGorjeta, gorjeta]);
 
-  const handleConsumo = (e: any) => {
-    setConsumo(e.target.value);
+  const handleConsumo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let intConsumo = parseFloat(e.target.value);
+    setConsumo(intConsumo);
   }
 
-  const handlePorcentagemGorjeta = (e: any) => {
-    setPorCentoGorjeta(e.target.value);
+  const handlePorcentagemGorjeta = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let intGorjeta = parseFloat(e.target.value);
+    setPorCentoGorjeta(intGorjeta);
   }
 
   return (
@@ -37,13 +40,13 @@ const App = () => {
           <label htmlFor="">Quanto deu a conta? </label>
           <Input
             type="number"
-            onChange={(e) => handleConsumo(e)}
+            onChange={handleConsumo}
             defaultValue={consumo}
           />
           <label htmlFor="">Qual a porcentagem da gorjeta? </label>
           <Input
             type="number"
-            onChange={(e) => handlePorcentagemGorjeta(e)}
+            onChange={handlePorcentagemGorjeta}
             defaultValue={porCentoGorjeta}
           />
 
@@ -51,11 +54,13 @@ const App = () => {
 
         <C.AreaConteudo>
           <C.InfoConteudo>
-            {parseInt(consumo) > 0 &&
+            {consumo > 0 &&
               <>
-                <p>Sub-total: R$ {parseInt(consumo) > 0 ? consumo : "0,00"}</p>
-                <p>Gorjeta ({porCentoGorjeta}%): R$ {gorjeta > 0 ? gorjeta : "0,00"}</p>
-                <h3>Total: R$ {total}</h3>
+                <p>Sub-total: {consumo > 0 ? F.formattedCurrency(consumo) : "0,00"}</p>
+                <p>
+                  Gorjeta ({isNaN(porCentoGorjeta) ? "0" : porCentoGorjeta}%): {gorjeta > 0 ? F.formattedCurrency(gorjeta) : "0,00"}
+                </p>
+                <h3>Total: {F.formattedCurrency(total)}</h3>
               </>
             }
           </C.InfoConteudo>
